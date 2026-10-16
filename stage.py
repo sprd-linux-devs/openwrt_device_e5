@@ -37,7 +37,9 @@ def stage(root):
             raise ValueError('Missing E5 base component: ' + name)
     marker.parent.mkdir(parents=True, exist_ok=True)
     marker.write_text('e5\n')
-    for name in ('vendor-start.sh', 'android-run', 'e5-modem-coldboot', 'e5-at',
+    runpy.run_path(str(TOP / 'device/linux_device_common/wifi-common.py'))['stage'](root)
+    runpy.run_path(str(TOP / 'device/openwrt_device_common/shared/modem-recovery.py'))['stage'](root)
+    for name in ('vendor-start.sh', 'android-import-perms.sh', 'android-run', 'e5-modem-coldboot', 'e5-at',
                  'e5-next-boot', 'e5-os', 'e5-sd-registry', 'e5-call-audio.py'):
         copy(root, TOP / 'device/linux_device_common/overlay/opt/e5' / name, 'opt/e5/' + name)
     for name in ('usr/libexec/e5-sms', 'usr/libexec/e5-sms-receive',
